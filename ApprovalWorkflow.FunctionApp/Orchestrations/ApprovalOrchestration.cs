@@ -1,0 +1,45 @@
+﻿using ApprovalWorkflow.Application.Models;
+using ApprovalWorkflow.FunctionApp.Activities;
+using ApprovalWorkflow.FunctionApp.Constants;
+using ApprovalWorkflow.FunctionApp.Models;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.DurableTask;
+
+namespace ApprovalWorkflow.FunctionApp.Orchestrations
+{
+    public class ApprovalOrchestration
+    {
+        [Function(nameof(ApprovalOrchestration))]
+        public async Task Run(
+        [OrchestrationTrigger] TaskOrchestrationContext context)
+        {
+            var approvalRequest = context.GetInput<ApprovalRequest>();
+            if (approvalRequest == null || string.IsNullOrEmpty(approvalRequest.RequestedEmail))
+            {
+                throw new ArgumentNullException(nameof(approvalRequest), "Approval request cannot be null.");
+            }
+
+            // Step 1: Send email (activity function)
+            await context.CallActivityAsync(nameof(SendEmailActivity), new EmailMessage
+            (
+                approvalRequest.RequestedEmail,
+                EmailConstant.ApprovalStarted,
+                EmailConstant.ApprovalStartedBody
+            ));
+
+            // Step 2: Wait for approval decision
+            string result = await context.WaitForExternalEvent<string>(ApprovalConstant.ApprovalEventName);
+
+            // Step 3: Notify based on result
+            string subject = $"{EmailConstant.Approval} {result}";
+            string body = $"{EmailConstant.ApprovalBody} {result.ToLower()}.";
+
+            await context.CallActivityAsync(nameof(SendEmailActivity), new EmailMessage
+            (
+                approvalRequest.RequestedEmail,
+                subject,
+                body
+            ));
+        }
+    }
+}

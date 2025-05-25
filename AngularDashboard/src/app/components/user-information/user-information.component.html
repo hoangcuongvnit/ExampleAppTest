@@ -1,0 +1,24 @@
+<div class="bg-white rounded shadow p-6">
+    <h2 class="text-xl font-bold mb-4">User Information</h2>
+    <div class="mb-2">
+        <span class="font-semibold">Name:</span> {{ name }}
+    </div>
+    <div class="mb-2">
+        <span class="font-semibold">Age:</span> {{ age }}
+    </div>
+    <div class="mb-2">
+        <span class="font-semibold">Gender:</span> {{ gender }}
+    </div>
+    <div class="mb-2">
+        <span class="font-semibold">Username:</span> {{ username }}
+    </div>
+    <div>
+        <span class="font-semibold">Description:</span>
+        <p class="ml-2">{{ description }}</p>
+    </div>
+    <div class="mt-4">
+        <button class="bg-red-500 text-white px-4 py-2 rounded" (click)="onSignOut()">
+            Sign Out
+        </button>
+    </div>
+</div>

@@ -1,8 +1,15 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Text;
 using UserManagement.WebApp.Api;
+using UserManagement.WebApp.Application.Common.Interfaces;
+using UserManagement.WebApp.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Register MediatR
 builder.Services.AddMediatR(cfg =>
@@ -36,6 +43,24 @@ if (builder.Environment.IsDevelopment())
     });
 }
 
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,6 +75,9 @@ if (app.Environment.IsDevelopment())
     // Apply CORS early in the pipeline
     app.UseCors("AllowAll");
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using System.Text;
 using UserManagement.WebApp.Application.Common;
+using UserManagement.WebApp.Application.Common.Interfaces;
 using UserManagement.WebApp.Application.Enums;
 using UserManagement.WebApp.Application.Extensions;
 using UserManagement.WebApp.Application.V1.Auth.Dtos;
@@ -9,6 +10,13 @@ namespace UserManagement.WebApp.Application.V1.Auth.Commands.SignIn
 {
     public class SignInCommandHandler : IRequestHandler<SignInCommand, Result<SignInResponse>>
     {
+        private readonly ITokenService _tokenService;
+
+        public SignInCommandHandler(ITokenService tokenService)
+        {
+            _tokenService = tokenService;
+        }
+
         public async Task<Result<SignInResponse>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
             // Simulate user authentication logic
@@ -21,7 +29,8 @@ namespace UserManagement.WebApp.Application.V1.Auth.Commands.SignIn
             // Simulate successful authentication
             var userId = Guid.NewGuid(); // Simulated user ID
             var userName = request.UserName;
-            var token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{userId}:{userName}")); // Simulated token
+            IEnumerable<string> roles = new List<string> { "Admin", "User" };
+            var token = _tokenService.GenerateToken(userName, roles); // Simulated token generation
             var expiresAt = DateTimeOffset.UtcNow.AddHours(1); // Token expiration time
             var response = new SignInResponse(
                 userId,

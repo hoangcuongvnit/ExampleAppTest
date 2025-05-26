@@ -10,7 +10,9 @@ namespace ApprovalWorkflow.FunctionApp.DependencyInjection
         public static void DIServiceCollection(this IServiceCollection services)
         {
             services.AddSingleton<IEmailService, SendGridEmailService>();
+            services.AddSingleton<IEmailService, GmailService>();
             services.AddSingleton<SendGridEmailService>();
+            services.AddSingleton<GmailService>();
             services.AddSingleton<EmailServiceFactory>();
         }
     }

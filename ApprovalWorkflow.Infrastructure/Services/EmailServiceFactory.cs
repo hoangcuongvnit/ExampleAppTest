@@ -18,6 +18,7 @@ namespace ApprovalWorkflow.Infrastructure.Services
             return providerName.ToLower() switch
             {
                 "sendgrid" => _serviceProvider.GetRequiredService<SendGridEmailService>(),
+                "gmail" => _serviceProvider.GetRequiredService<GmailService>(),
                 // Add other providers if needed
                 _ => throw new InvalidOperationException("Unknown email provider.")
             };

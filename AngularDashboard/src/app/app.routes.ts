@@ -10,7 +10,8 @@ export const routes: Routes = [
 
     // hoemepage route
     {   path: '',
-        component: HomeComponent
+        component: HomeComponent,
+        pathMatch: 'full'
     },
 
     // guestspage route

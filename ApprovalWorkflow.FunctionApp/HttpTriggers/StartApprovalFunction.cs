@@ -1,5 +1,6 @@
 ﻿using ApprovalWorkflow.Application.Models;
 using ApprovalWorkflow.FunctionApp.Orchestrations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
@@ -12,8 +13,9 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
     public class StartApprovalFunction
     {
         [Function("StartApproval")]
+        [Authorize]
         public async Task<HttpResponseData> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,
             FunctionContext executionContext)
         {

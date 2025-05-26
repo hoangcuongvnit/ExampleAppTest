@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using System.Text;
 using UserManagement.WebApp.Application.Common;
 using UserManagement.WebApp.Application.Common.Interfaces;
 using UserManagement.WebApp.Application.Enums;

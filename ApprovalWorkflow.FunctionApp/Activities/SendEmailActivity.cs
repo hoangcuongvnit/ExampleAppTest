@@ -22,7 +22,7 @@ namespace ApprovalWorkflow.FunctionApp.Activities
         {
             _logger.LogInformation($"Sending email to {message.To} with subject: {message.Subject}");
 
-            var emailService = _emailFactory.Create("SendGrid");
+            var emailService = _emailFactory.Create("Gmail");
             await emailService.SendEmailAsync(
                 message.To,
                 message.Subject,

@@ -10,7 +10,8 @@ namespace ApprovalWorkflow.FunctionApp.Configuration
         {
             // Use the Configuration property directly instead of ConfigurationBuilder
             var config = builder.Configuration;
-            builder.Services.Configure<AppConfig>(config);
+            builder.Services.Configure<SendGridConfig>(config);
+            builder.Services.Configure<GmailConfig>(config);
         }
     }
 }

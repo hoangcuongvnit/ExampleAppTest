@@ -30,7 +30,6 @@ build
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
 *.sw?
 
 # .NET Core specific

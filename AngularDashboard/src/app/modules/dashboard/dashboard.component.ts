@@ -2,13 +2,14 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../core/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ApprovalTableComponent } from '../../components/approval-table/approval-table.component';
 
 @Component({
     selector: 'dashboard',
     templateUrl: './dashboard.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [ CommonModule, RouterModule  ]
+    imports: [ CommonModule, RouterModule, ApprovalTableComponent ]
 })
 export class DashboardComponent {
     showConfirmDialog = false;

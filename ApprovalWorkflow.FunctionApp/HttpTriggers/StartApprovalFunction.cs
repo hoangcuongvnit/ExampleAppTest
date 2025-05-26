@@ -1,6 +1,8 @@
-﻿using ApprovalWorkflow.Application.Models;
+﻿using ApprovalWorkflow.Application.Common;
+using ApprovalWorkflow.Application.Models;
 using ApprovalWorkflow.FunctionApp.Orchestrations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
@@ -20,9 +22,19 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
             FunctionContext executionContext)
         {
             var logger = executionContext.GetLogger("StartApproval");
-
-            var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            var approvalRequest = JsonSerializer.Deserialize<ApprovalRequest>(requestBody);
+            ApprovalRequest? approvalRequest;
+            try
+            {
+                var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                approvalRequest = JsonSerializer.Deserialize<ApprovalRequest>(requestBody);
+            }
+            catch (JsonException ex)
+            {
+                logger.LogError(ex, "Failed to deserialize request body.");
+                var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badRequest.WriteStringAsync("Invalid JSON format in request body.");
+                return badRequest;
+            }
 
             if (approvalRequest == null || string.IsNullOrEmpty(approvalRequest.RequestedBy))
             {
@@ -39,10 +51,10 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
 
             logger.LogInformation($"Started orchestration with ID = '{instanceId}'.");
 
-            var response = req.CreateResponse(HttpStatusCode.Accepted);
-            await response.WriteStringAsync($"Approval started. Orchestration ID = {instanceId}");
-
-            return response;
+            var response = new Result<string>(instanceId, true);
+            var httpResponse = req.CreateResponse(HttpStatusCode.OK);
+            await httpResponse.WriteAsJsonAsync(response);
+            return httpResponse;
         }
     }
 

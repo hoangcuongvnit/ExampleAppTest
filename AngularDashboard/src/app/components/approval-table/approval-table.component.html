@@ -1,0 +1,42 @@
+<table class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Requested By</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Requested Email</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Comments</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Requested At</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Responded At</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Responded By</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider min-w-[190px]">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="bg-white divide-y divide-gray-200">
+    <tr *ngFor="let approval of approvals" class="hover:bg-gray-50">
+      <td class="px-4 py-2">{{ approval.requestedBy }}</td>
+      <td class="px-4 py-2">{{ approval.requestedEmail }}</td>
+      <td class="px-4 py-2">{{ approval.status }}</td>
+      <td class="px-4 py-2">{{ approval.comments }}</td>
+      <td class="px-4 py-2">{{ approval.requestedAt | date:'short' }}</td>
+      <td class="px-4 py-2">{{ approval.respondedAt ? (approval.respondedAt | date:'short') : '-' }}</td>
+      <td class="px-4 py-2">{{ approval.respondedBy || '-' }}</td>
+      <td class="px-4 py-2 space-x-2 min-w-[190px]">
+        <button 
+          *ngIf="approval.status === 'Requested'" 
+          class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
+          Start Approval
+        </button>
+        <ng-container *ngIf="approval.status === 'Pending'">
+          <button 
+            class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs">
+            Approve
+          </button>
+          <button 
+            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">
+            Reject
+          </button>
+        </ng-container>
+      </td>
+    </tr>
+  </tbody>
+</table>

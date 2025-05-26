@@ -17,9 +17,6 @@ dist-ssr
 out
 build
 
-# Local environment files
-*.local
-
 # Editor directories and files
 .vscode/*
 .vs/*
@@ -49,3 +46,4 @@ ScaffoldingReadMe.txt
 
 # Rider
 .idea/
+/ApprovalWorkflow.FunctionApp/local.settings.json

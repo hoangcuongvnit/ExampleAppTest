@@ -1,8 +1,11 @@
 using ApprovalWorkflow.FunctionApp.Configuration;
 using ApprovalWorkflow.FunctionApp.DependencyInjection;
+using ApprovalWorkflow.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +20,12 @@ builder.Services.DIServiceCollection();
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
+
+// Load from configuration
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Register PostgreSQL DbContext
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer("Bearer", options =>

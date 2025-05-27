@@ -34,7 +34,7 @@ namespace ApprovalWorkflow.Domain.Entities
         public string? InstanceId { get; set; }
 
         [Column("status")]
-        public ApprovalStatus Status { get; set; } // Pending, Approved, Rejected
+        public ApprovalStatus Status { get; set; } //  Requested, Pending, Approved, Rejected
 
         [Column("comments")]
         public string? Comments { get; set; }

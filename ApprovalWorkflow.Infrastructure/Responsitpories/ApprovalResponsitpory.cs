@@ -4,6 +4,7 @@ using ApprovalWorkflow.Domain.Entities;
 using ApprovalWorkflow.Domain.Enums;
 using ApprovalWorkflow.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ApprovalWorkflow.Infrastructure.Responsitpories
 {
@@ -16,6 +17,14 @@ namespace ApprovalWorkflow.Infrastructure.Responsitpories
             _context = context;
         }
 
+        private void CheckDateTimeKind(Approval approval)
+        {
+            if (approval.RequestedAt.Kind == DateTimeKind.Unspecified)
+            {
+                approval.RequestedAt = DateTime.SpecifyKind(approval.RequestedAt, DateTimeKind.Utc);
+            }
+        }
+
         public async Task AddApprovalRequest(ApprovalRequest request)
         {
             var approval = new Approval
@@ -25,6 +34,8 @@ namespace ApprovalWorkflow.Infrastructure.Responsitpories
                 RequestedEmail = request.RequestedEmail,
                 RequestedAt = request.RequestedAt,
             };
+            CheckDateTimeKind(approval);
+
             _context.Approvals.Add(approval);
             await _context.SaveChangesAsync();
         }
@@ -43,8 +54,9 @@ namespace ApprovalWorkflow.Infrastructure.Responsitpories
                 approval.RespondedAt = request.RespondedAt;
                 approval.Status = request.Status;
                 approval.Comments = request.Comments;
-                _context.Approvals.Update(approval);
+                CheckDateTimeKind(approval);
 
+                _context.Approvals.Update(approval);
                 await _context.SaveChangesAsync();
             }
         }
@@ -61,6 +73,8 @@ namespace ApprovalWorkflow.Infrastructure.Responsitpories
             {
                 approval.InstanceId = instanceId;
                 approval.Status = ApprovalStatus.Pending;
+                CheckDateTimeKind(approval);
+
                 _context.Approvals.Update(approval);
                 await _context.SaveChangesAsync();
             }

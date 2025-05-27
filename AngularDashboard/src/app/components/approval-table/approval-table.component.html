@@ -1,38 +1,50 @@
+<div class="p-4 bg-white shadow rounded-lg mb-6">
+  <div class="grid grid-cols-2 gap-4 items-center mb-4">
+    <div>
+      <h2 class="text-lg font-semibold text-gray-800 mb-1">Approval Requests</h2>
+      <p class="text-sm text-gray-600">Manage your approval requests below.</p>
+    </div>
+    <div class="flex justify-end">
+      <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm mr-2" (click)="refreshApprovals()">
+        Refresh
+      </button>
+      <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm" (click)="createApproval()">
+        New Approval Request
+      </button>
+    </div>
+  </div>
+</div>
 <table class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded-lg overflow-hidden">
   <thead class="bg-gray-100">
     <tr>
       <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Requested By</th>
       <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Requested Email</th>
       <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
-      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Comments</th>
       <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Requested At</th>
       <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Responded At</th>
       <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Responded By</th>
-      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider min-w-[190px]">Actions</th>
+      <th class="px-4 py-2 text-left text-xs font-medium text-gray-700 uppercase tracking-wider min-w-[190px]">Actions
+      </th>
     </tr>
   </thead>
   <tbody class="bg-white divide-y divide-gray-200">
     <tr *ngFor="let approval of approvals" class="hover:bg-gray-50">
-      <td class="px-4 py-2">{{ approval.requestedBy }}</td>
-      <td class="px-4 py-2">{{ approval.requestedEmail }}</td>
-      <td class="px-4 py-2">{{ approval.status }}</td>
-      <td class="px-4 py-2">{{ approval.comments }}</td>
-      <td class="px-4 py-2">{{ approval.requestedAt | date:'short' }}</td>
-      <td class="px-4 py-2">{{ approval.respondedAt ? (approval.respondedAt | date:'short') : '-' }}</td>
-      <td class="px-4 py-2">{{ approval.respondedBy || '-' }}</td>
+      <td class="px-4 py-2">{{ approval.RequestedBy }}</td>
+      <td class="px-4 py-2">{{ approval.RequestedEmail }}</td>
+      <td class="px-4 py-2">{{ approval.Status }}</td>
+      <td class="px-4 py-2">{{ approval.RequestedAt | date:'short' }}</td>
+      <td class="px-4 py-2">{{ approval.RespondedAt ? (approval.RespondedAt | date:'short') : '-' }}</td>
+      <td class="px-4 py-2">{{ approval.RespondedBy || '-' }}</td>
       <td class="px-4 py-2 space-x-2 min-w-[190px]">
-        <button 
-          *ngIf="approval.status === 'Requested'" 
+        <button *ngIf="approval.Status === 'Requested'" (click)="startApproval(approval.Id)"
           class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-xs">
           Start Approval
         </button>
-        <ng-container *ngIf="approval.status === 'Pending'">
-          <button 
-            class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs">
+        <ng-container *ngIf="approval.Status === 'Pending'">
+          <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs" (click)="approve(approval.InstanceId)">
             Approve
           </button>
-          <button 
-            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">
+          <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs" (click)="reject(approval.InstanceId)">
             Reject
           </button>
         </ng-container>

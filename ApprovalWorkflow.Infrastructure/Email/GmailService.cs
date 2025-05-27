@@ -1,14 +1,17 @@
 ﻿using ApprovalWorkflow.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ApprovalWorkflow.Infrastructure.Email
 {
     public class GmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
-        public GmailService(IConfiguration configuration)
+        private readonly ILogger<GmailService> _logger;
+        public GmailService(IConfiguration configuration, ILogger<GmailService> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task SendEmailAsync(string to, string subject, string message)
@@ -27,7 +30,9 @@ namespace ApprovalWorkflow.Infrastructure.Email
 
             var mail = new System.Net.Mail.MailMessage(from, to, subject, message);
 
-            await client.SendMailAsync(mail);
+            //await client.SendMailAsync(mail);
+            await Task.CompletedTask; // Fake await to simulate asynchronous behavior
+            _logger.LogWarning($"GmailService: SendMailAsync message: {message}");
         }
     }
 }

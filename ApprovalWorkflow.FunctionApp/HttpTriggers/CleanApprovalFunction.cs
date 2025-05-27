@@ -1,5 +1,4 @@
 ﻿using ApprovalWorkflow.Application.V1.Approval.Commands.CleanApproval;
-using ApprovalWorkflow.FunctionApp.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;

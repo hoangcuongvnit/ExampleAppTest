@@ -1,7 +1,6 @@
 ﻿using ApprovalWorkflow.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Xml.Linq;
 
 namespace ApprovalWorkflow.Domain.Entities
 {

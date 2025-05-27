@@ -4,7 +4,6 @@ using ApprovalWorkflow.Domain.Entities;
 using ApprovalWorkflow.Domain.Enums;
 using ApprovalWorkflow.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace ApprovalWorkflow.Infrastructure.Responsitpories
 {

@@ -1,6 +1,8 @@
 ﻿using ApprovalWorkflow.Application.Common;
 using ApprovalWorkflow.Application.Models;
+using ApprovalWorkflow.Application.V1.Approval.Commands.UpdateInstanceId;
 using ApprovalWorkflow.FunctionApp.Orchestrations;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
@@ -14,11 +16,19 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
 {
     public class StartApprovalFunction
     {
+        private readonly IMediator _mediator;
+        public StartApprovalFunction(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+
         [Function("StartApproval")]
         [Authorize]
         public async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,
+            Guid requestId,
             FunctionContext executionContext)
         {
             var logger = executionContext.GetLogger("StartApproval");
@@ -48,6 +58,8 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
                 nameof(ApprovalOrchestration),
                 approvalRequest
             );
+
+            await _mediator.Send(new UpdateInstanceIdCommand(requestId, instanceId));
 
             logger.LogInformation($"Started orchestration with ID = '{instanceId}'.");
 

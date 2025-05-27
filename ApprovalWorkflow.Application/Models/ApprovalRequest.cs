@@ -2,17 +2,24 @@
 {
     public class ApprovalRequest
     {
+        public Guid Id { get; set; }
         public string RequestedBy { get; set; }
         public string RequestedEmail { get; set; }
-        public string ApprovalItem { get; set; } // Could be a description or a link to a task/document
-        public DateTime RequestedAt { get; set; }
+        public string? Comments { get; set; }
+        public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
 
-        public ApprovalRequest(string requestedBy, string requestedEmail, string approvalItem)
+        public ApprovalRequest() { }
+        public ApprovalRequest(
+                Guid id,
+                string requestedBy,
+                string requestedEmail,
+                string? comments = null
+            )
         {
+            Id = id;
             RequestedBy = requestedBy;
             RequestedEmail = requestedEmail;
-            ApprovalItem = approvalItem;
-            RequestedAt = DateTime.UtcNow;
+            Comments = comments;
         }
     }
 }

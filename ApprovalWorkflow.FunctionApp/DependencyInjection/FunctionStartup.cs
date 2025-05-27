@@ -1,5 +1,6 @@
 ﻿using ApprovalWorkflow.Application.Interfaces;
 using ApprovalWorkflow.Infrastructure.Email;
+using ApprovalWorkflow.Infrastructure.Responsitpories;
 using ApprovalWorkflow.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,7 @@ namespace ApprovalWorkflow.FunctionApp.DependencyInjection
             services.AddSingleton<SendGridEmailService>();
             services.AddSingleton<GmailService>();
             services.AddSingleton<EmailServiceFactory>();
+            services.AddSingleton<IApprovalResponsitpory, ApprovalResponsitpory>();
         }
     }
 }

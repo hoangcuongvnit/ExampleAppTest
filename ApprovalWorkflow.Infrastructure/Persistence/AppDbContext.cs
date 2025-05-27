@@ -12,7 +12,7 @@ namespace ApprovalWorkflow.Infrastructure.Persistence
         // Optional: configure entity mappings
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Approval>().ToTable("Approvals");
+            modelBuilder.Entity<Approval>().ToTable("approval");
             base.OnModelCreating(modelBuilder);
         }
     }

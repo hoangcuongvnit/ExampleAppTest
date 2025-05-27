@@ -5,6 +5,9 @@
       <p class="text-sm text-gray-600">Manage your approval requests below.</p>
     </div>
     <div class="flex justify-end">
+      <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm mr-2" (click)="cleanApprovals()">
+        Delete All
+      </button>
       <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm mr-2" (click)="refreshApprovals()">
         Refresh
       </button>

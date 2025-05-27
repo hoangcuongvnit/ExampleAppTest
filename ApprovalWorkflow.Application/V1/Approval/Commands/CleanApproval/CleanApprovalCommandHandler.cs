@@ -1,0 +1,24 @@
+﻿using ApprovalWorkflow.Application.Interfaces;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ApprovalWorkflow.Application.V1.Approval.Commands.CleanApproval
+{
+    public class CleanApprovalCommandHandler : IRequestHandler<CleanApprovalCommand, bool>
+    {
+        private readonly IApprovalResponsitpory _approvalResponsitpory;
+        public CleanApprovalCommandHandler(IApprovalResponsitpory approvalResponsitpory)
+        {
+            _approvalResponsitpory = approvalResponsitpory;
+        }
+        public async Task<bool> Handle(CleanApprovalCommand request, CancellationToken cancellationToken)
+        {
+            await _approvalResponsitpory.CleanApprovalsRequest();
+            return true;
+        }
+    }
+}

@@ -1,3 +1,4 @@
+using ApprovalWorkflow.Application.V1.Approval.Commands.CleanApproval;
 using ApprovalWorkflow.Application.V1.Approval.Commands.CreateApproval;
 using ApprovalWorkflow.Application.V1.Approval.Commands.GetApproval;
 using ApprovalWorkflow.Application.V1.Approval.Commands.GetApprovals;
@@ -31,8 +32,8 @@ builder.Services.AddMediatR(cfg =>
         typeof(GetApprovalCommandHandler).Assembly,
         typeof(GetApprovalsCommandHandler).Assembly,
         typeof(UpdateApprovalCommandHandler).Assembly,
-        typeof(UpdateInstanceIdCommandHandler).Assembly
-
+        typeof(UpdateInstanceIdCommandHandler).Assembly,
+        typeof(CleanApprovalCommandHandler).Assembly
     );
 });
 

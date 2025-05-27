@@ -31,4 +31,8 @@ export class ApprovalService {
     startApproval(requestId: string): Observable<any> {
         return this._httpClient.post(`${this.baseUrl}/start-approval/${requestId}`, {});
     }
+
+    cleanApprovals(): Observable<any> {
+        return this._httpClient.post(`${this.baseUrl}/approval/clean`, {});
+    }
 }

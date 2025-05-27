@@ -79,5 +79,15 @@ namespace ApprovalWorkflow.Infrastructure.Responsitpories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task CleanApprovalsRequest()
+        {
+            var approvals = await _context.Approvals.ToListAsync();
+            foreach (var approval in approvals)
+            {
+                _context.Approvals.Remove(approval);
+            }
+            await _context.SaveChangesAsync();
+        }
     }
 }

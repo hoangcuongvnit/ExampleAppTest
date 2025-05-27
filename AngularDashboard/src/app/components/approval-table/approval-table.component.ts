@@ -88,4 +88,17 @@ export class ApprovalTableComponent implements OnInit {
             }
         });
     }
+
+    cleanApprovals(): void {
+        this.approvalService.cleanApprovals().subscribe({
+            next: () => {
+                // Refresh the approvals list after cleaning
+                this.getApprovals();
+            },
+            error: (err) => {
+                // Handle error (optional: show a message)
+                console.error('Failed to clean approvals', err);
+            }
+        });
+    }
 }

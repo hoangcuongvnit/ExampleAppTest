@@ -10,5 +10,6 @@ namespace ApprovalWorkflow.Application.Interfaces
         Task UpdateApprovalRequest(UpdateApprovalRequest request);
         Task<IEnumerable<Approval>> GetAllApprovalRequests();
         Task UpdateApprovalInstanceIdRequest(Guid id, string instanceId);
+        Task CleanApprovalsRequest();
     }
 }

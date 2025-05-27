@@ -1,5 +1,6 @@
 ﻿using ApprovalWorkflow.Application.Common;
 using ApprovalWorkflow.Application.Models;
+using ApprovalWorkflow.Application.V1.Approval.Commands.GetApproval;
 using ApprovalWorkflow.Application.V1.Approval.Commands.UpdateInstanceId;
 using ApprovalWorkflow.FunctionApp.Orchestrations;
 using MediatR;
@@ -10,7 +11,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Text.Json;
 
 namespace ApprovalWorkflow.FunctionApp.HttpTriggers
 {
@@ -26,33 +26,33 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
         [Function("StartApproval")]
         [Authorize]
         public async Task<HttpResponseData> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "start-approval/{requestId}")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,
             Guid requestId,
             FunctionContext executionContext)
         {
-            var logger = executionContext.GetLogger("StartApproval");
-            ApprovalRequest? approvalRequest;
-            try
+            var logger = executionContext.GetLogger($"StartApproval: {requestId}");
+            if (requestId == Guid.Empty)
             {
-                var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                approvalRequest = JsonSerializer.Deserialize<ApprovalRequest>(requestBody);
-            }
-            catch (JsonException ex)
-            {
-                logger.LogError(ex, "Failed to deserialize request body.");
-                var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequest.WriteStringAsync("Invalid JSON format in request body.");
-                return badRequest;
+                var responseB = req.CreateResponse(HttpStatusCode.BadRequest);
+                await responseB.WriteStringAsync("Invalid request ID.");
+                return responseB;
             }
 
-            if (approvalRequest == null || string.IsNullOrEmpty(approvalRequest.RequestedBy))
+            var approvalResponse = await _mediator.Send(new GetApprovalCommand(requestId));
+            if (approvalResponse == null)
             {
-                var badRequest = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequest.WriteStringAsync("Invalid request");
-                return badRequest;
+                var responseC = req.CreateResponse(HttpStatusCode.NotFound);
+                await responseC.WriteStringAsync($"Approval request with ID {requestId} not found.");
+                return responseC;
             }
 
+            var approvalRequest = new ApprovalRequest
+            {
+                Id = approvalResponse.Id,
+                RequestedBy = approvalResponse.RequestedBy,
+                RequestedEmail = approvalResponse.RequestedEmail
+            };
             // Start the orchestration
             string instanceId = await client.ScheduleNewOrchestrationInstanceAsync(
                 nameof(ApprovalOrchestration),

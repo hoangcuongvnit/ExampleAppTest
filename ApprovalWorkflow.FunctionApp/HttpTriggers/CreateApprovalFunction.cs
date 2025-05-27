@@ -20,7 +20,7 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
 
         [Function(nameof(CreateApprovalFunction))]
         public async Task<HttpResponseData> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "approves")] HttpRequestData req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "approval")] HttpRequestData req,
             FunctionContext context)
         {
             var logger = context.GetLogger("ApproveFunction");

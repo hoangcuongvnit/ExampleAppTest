@@ -1,6 +1,5 @@
 ﻿using ApprovalWorkflow.Application.V1.Approval.Commands.CleanApproval;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
@@ -19,7 +18,6 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
         }
 
         [Function(nameof(CleanApprovalFunction))]
-        [Authorize]
         public async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "approval/clean")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,

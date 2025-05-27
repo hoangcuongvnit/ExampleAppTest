@@ -1,5 +1,4 @@
 ﻿using ApprovalWorkflow.FunctionApp.Constants;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.DurableTask.Client;
@@ -11,7 +10,6 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
     public class ApproveFunction
     {
         [Function("Approve")]
-        [Authorize]
         public async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "approve/{instanceId}")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,

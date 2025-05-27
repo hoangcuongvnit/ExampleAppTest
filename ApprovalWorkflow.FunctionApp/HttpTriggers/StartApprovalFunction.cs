@@ -4,7 +4,6 @@ using ApprovalWorkflow.Application.V1.Approval.Commands.GetApproval;
 using ApprovalWorkflow.Application.V1.Approval.Commands.UpdateInstanceId;
 using ApprovalWorkflow.FunctionApp.Orchestrations;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -24,7 +23,6 @@ namespace ApprovalWorkflow.FunctionApp.HttpTriggers
 
 
         [Function("StartApproval")]
-        [Authorize]
         public async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "start-approval/{requestId}")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,

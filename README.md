@@ -38,3 +38,6 @@ A full-stack web application built with **.NET 8** and **Angular 19**, using **D
 
 
 ![file-structure](https://github.com/user-attachments/assets/dc1a32eb-046a-4ea3-8b85-41b72e2b3950)
+
+- **ApprovalWorkflow.FunctionApp/local.settings.json**
+

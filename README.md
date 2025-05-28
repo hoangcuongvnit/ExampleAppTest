@@ -40,27 +40,4 @@ A full-stack web application built with **.NET 8** and **Angular 19**, using **D
 ![file-structure](https://github.com/user-attachments/assets/dc1a32eb-046a-4ea3-8b85-41b72e2b3950)
 
 - **ApprovalWorkflow.FunctionApp/local.settings.json**
-{
-  "IsEncrypted": false,
-  "Values": {
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=.....",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-
-    // Jwt config
-    "Jwt:Key": "ThisIsASecretKeyThatIsAtLeast32Chars!",
-    "Jwt:Issuer": "your-api",
-    "Jwt:Audience": "your-api-users",
-
-    // Gmail config
-    "Gmail:Username": "....",
-    "Gmail:Password": ".....",
-    "Gmail:Sender": ".......",
-
-    "ConnectionStrings:DefaultConnection": "Host=127.0.0.1;Port=5432;Database=postgres;Username=postgres;Password=postgres"
-  },
-  "Host": {
-    "CORS": "http://localhost:4200",
-    "CORS_SUPPORT_CREDENTIALS": true
-  }
-}
 

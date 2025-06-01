@@ -14,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
-using System.Text;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -35,7 +34,7 @@ builder.Services.AddMediatR(cfg =>
     );
 });
 
-builder.Services.DIServiceCollection();
+builder.Services.DIServiceCollection(builder.Configuration);
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();

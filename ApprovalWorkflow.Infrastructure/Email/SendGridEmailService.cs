@@ -5,27 +5,18 @@ using SendGrid.Helpers.Mail;
 
 namespace ApprovalWorkflow.Infrastructure.Email
 {
-    public class SendGridEmailService : IEmailService
+    public class SendGridEmailService(IConfiguration configuration, SendGridClient sendGridClient) : IEmailService
     {
-        private readonly IConfiguration _configuration;
-
-        public SendGridEmailService(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+        private readonly SendGridClient _sendGridClient = sendGridClient;
+        private readonly string _senderEmail = configuration["SendGrid:Sender"]
+            ?? throw new ArgumentNullException(nameof(configuration), "Sender email configuration is missing.");
 
         public async Task SendEmailAsync(string to, string subject, string message)
         {
-            var apiKey = _configuration["SendGrid:ApiKey"];
-            var sender = _configuration["SendGrid:Sender"];
-
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress(sender, "Approval System");
+            var from = new EmailAddress(_senderEmail, "Approval System");
             var toEmail = new EmailAddress(to);
             var msg = MailHelper.CreateSingleEmail(from, toEmail, subject, message, message);
-            var response = await client.SendEmailAsync(msg);
-
-            // Optional: log or handle failure responses
+            var response = await _sendGridClient.SendEmailAsync(msg);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿# 🌐 ExampleAppTest
+﻿# 🌐 Project approval workflow using Durable Function
 
 A full-stack web application built with **.NET 8** and **Angular 19**, using **Durable Azure Functions**, **CQRS pattern (with MediatR)**, **JWT Authentication**, and **PostgreSQL** for persistence. Styled with **Tailwind CSS** and deployed with **Azure Storage**.
 
